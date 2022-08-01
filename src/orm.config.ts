@@ -1,4 +1,7 @@
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
+import { Item } from "./items/item.entity";
+import { Order } from "./orders/orders.entity";
+import { User } from "./users/user.entity";
 
 export const config: TypeOrmModuleOptions = {
     type: 'postgres',
@@ -8,6 +11,6 @@ export const config: TypeOrmModuleOptions = {
     host: 'kandula.db.elephantsql.com',
     database: 'yvyxxmra',
     synchronize: true,
-    // entities: [User,Item],
-    entities: ['dist/**/*.entity{.ts,.js}'],
+    entities: [User,Item, Order],
+    // entities: ['dist/**/*.entity{.ts,.js}'],
 };

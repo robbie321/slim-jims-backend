@@ -16,66 +16,69 @@ import { JwtPayload } from './admin.strategy';
 export class AuthService {
 
   constructor(
-    private usersService: UsersService,
     private jwtService: JwtService,
     @InjectRepository(User) private user: Repository<User>
   ) {}
 
 
   //validate sign in credentials
-  public async validateUserCredentials(
-    data: UserSigninReqModel,
-  ): Promise<UserSigninResModel> {
+  public async validateUserCredentials(data: UserSigninReqModel): Promise<UserSigninResModel> {
+
+    //find email provided
     const user = await this.user.findOne({ email: data.email });
+
+    //instantiate new sign in model
     const result = new UserSigninResModel();
+
+    //if email is empty
     if (!data.email) {
       result.message = 'Email cant be empty';
       result.successStatus = false;
       return result;
     }
+
+    //validate email regex
     const emailRule =
       /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+      //respond if email is not valid
     if (!emailRule.test(data.email.toLowerCase())) {
       result.message = 'Invalid email';
       result.successStatus = false;
       return result;
     }
+
+    //if no email is found
     if (user == null) {
       result.message = 'user not found';
       result.successStatus = false;
       return result;
     }
+
+    //validate password with bycrpt
     const isValidPassword = await bcrypt.compare(data.password, user.password);
+
+    //return invalid if no match
     if (!isValidPassword) {
       result.message = 'invalid Password';
       result.successStatus = false;
       return result;
     }
-    const userId = user.userId;
-    const email = user.email;
-    // const { refreshToken, refreshTokenExp } = await this.getRefreshToken(
-    //   userId,
-    // );
+
+    //put the user id and role into the JWT token
     const signInToken = await this.getJwtToken({
       userId: user.userId,
       role: user.role,
     });
-    console.log(signInToken);
 
+    //assign valus to sign in model
     result.successStatus = true;
     result.message = 'login successful';
     result.userId = user.userId;
     result.role = user.role;
     result.token = signInToken;
-    // result.refreshToken = refreshToken;
-    // result.refreshTokenExp = refreshTokenExp;
-    return result;
-  }
 
-  async findByPayload({ userId }: any): Promise<any> {
-    return await this.user.findOne({
-      where: { userId },
-    });
+    return result;
   }
 
 
@@ -89,6 +92,12 @@ export class AuthService {
       throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
     }
     return user;
+  }
+
+  async findByPayload({ userId }: any): Promise<any> {
+    return await this.user.findOne({
+      where: { userId },
+    });
   }
 
 
@@ -109,16 +118,25 @@ export class AuthService {
   public async registerUser(
     regModel: RegistrationReqModel,
   ): Promise<RegistrationRespModel> {
+    //instantiate new registration response model
     const result = new RegistrationRespModel();
+
+    //validate regritration request
     const errorMessage = await this.registrationValidation(regModel);
+
+    //if error is true set successStatus to false
     if (errorMessage) {
       result.message = errorMessage.message;
       result.successStatus = false;
       return result;
     }
+
+    //add the role to the jwt
     const signUpToken = await this.getJwtToken({
       role: 'user',
     });
+
+    //create a new user
     const newUser = new User();
     newUser.name = regModel.name;
     newUser.email = regModel.email;
@@ -127,18 +145,22 @@ export class AuthService {
     newUser.secondAddress = regModel.secondAddress;
     newUser.county = regModel.county;
     newUser.eircode = regModel.eircode;
-    newUser.password = await this.getPasswordHash(regModel.password);
-    await this.user.insert(newUser);
+    newUser.password = await this.getPasswordHash(regModel.password); //hash the password
+    await this.user.insert(newUser); //insert to the database
     result.successStatus = true;
     result.message = 'success';
     result.token = signUpToken;
     return result;
   }
+
+
+  //hash the password with bycrypt
   private async getPasswordHash(password: string): Promise<string> {
     const hash = await bcrypt.hash(password, 10);
     return hash;
   }
 
+  //return the jwt from the jwt service
   public async getJwtToken(dataToken): Promise<string> {
     const payload = {
       ...dataToken,
@@ -156,19 +178,29 @@ export class AuthService {
       result.successStatus = false;
       return result;
     }
+
+    //email regex
     const emailRule =
       /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+      //check if email provided matches the regex
     if (!emailRule.test(regModel.email.toLowerCase())) {
       result.message = 'Invalid email';
       result.successStatus = false;
       return result;
     }
+
+    //check if email exists
     const user = await this.user.findOne({ email: regModel.email });
+
+    //if email is in the database, return message
     if (user != null && user.email) {
       result.message = 'Email already exist';
       result.successStatus = false;
       return result;
     }
+
+    //return false if passwords do not match
     if (regModel.password !== regModel.confirmPassword) {
       result.message = 'Confirm password not matching';
       result.successStatus = false;

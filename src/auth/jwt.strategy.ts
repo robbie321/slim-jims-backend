@@ -20,7 +20,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (!user) {
       throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
     }
-    console.log("HERE");
 
     return user;
   }

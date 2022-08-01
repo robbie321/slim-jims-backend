@@ -23,8 +23,6 @@ export class ItemsService {
             stockQuantity
         } = request.body;
 
-        console.log(request.body);
-
         //create new Item
         const item = new Item();
 
@@ -32,9 +30,6 @@ export class ItemsService {
         item.name = name;
         item.price = price !== null ? price : '';
         item.stockQuantity = stockQuantity;
-
-        console.log(item.name + "/n" + item.price + "/n" + item.stockQuantity );
-
 
         //insert into database
         const data = await this.items.save(item);
@@ -54,3 +49,5 @@ export class ItemsService {
         return response.status(200).json(item);
     }
 }
+
+

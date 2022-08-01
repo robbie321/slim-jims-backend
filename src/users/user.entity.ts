@@ -34,12 +34,6 @@ export class User {
   @Column({ nullable: false, name: 'userRole', default: 'user' })
   role: string;
 
-  @Column({ nullable: true, name: 'refreshtoken' })
-  refreshToken: string;
-
-  @Column({ type: 'date', nullable: true, name: 'refreshtokenexp' })
-  refreshTokenExp: string;
-
   @OneToMany(() => Order, (order) => order.user, {
     onDelete: 'CASCADE'
   })

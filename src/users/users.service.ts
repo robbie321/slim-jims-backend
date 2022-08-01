@@ -13,8 +13,7 @@ export type Users = any;
 @Injectable()
 export class UsersService {
 
-  constructor(@InjectRepository(User) private users: Repository<User>,
-  ){}
+  constructor(@InjectRepository(User) private users: Repository<User>){}
 
 
 

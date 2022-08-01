@@ -11,7 +11,6 @@ export class OrdersController {
     @Get('userOrders')
     @UseGuards(JwtAuthGuard)
     async getUserOrders(@Req() request, @Res() response){
-
         return await this.orderService.fetchUserOrders(request,response);
     }
 

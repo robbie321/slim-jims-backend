@@ -6,6 +6,4 @@ export class UserSigninResModel {
     userId: number;
     role: string;
     token: string;
-    // refreshToken: string;
-    // refreshTokenExp: string;
   }
