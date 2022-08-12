@@ -3,6 +3,7 @@ import { Item } from "./items/item.entity";
 import { Order } from "./orders/orders.entity";
 import { User } from "./users/user.entity";
 
+
 export const config: TypeOrmModuleOptions = {
     type: 'postgres',
     username: 'yvyxxmra',
@@ -12,5 +13,4 @@ export const config: TypeOrmModuleOptions = {
     database: 'yvyxxmra',
     synchronize: true,
     entities: [User,Item, Order],
-    // entities: ['dist/**/*.entity{.ts,.js}'],
 };

@@ -105,8 +105,12 @@ export class AuthService {
   async checkUserRole(userId) : Promise<any> {
     const user = await this.findByPayload(userId);
 
+    console.log(user);
+
     //returns exception if user is not an admin
     if (user.role != 'admin') {
+      console.log(user.role);
+
       throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
     }
     return user;

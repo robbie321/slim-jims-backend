@@ -1,8 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
-import { response } from 'express';
-import { request } from 'http';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.gaurd';
-import { JwtStrategy } from 'src/auth/jwt.strategy';
+import { Controller, Delete, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { JwtAdminAuthGuard } from 'src/auth/jwtAdmin-auth.guard';
 import { ItemsService } from './items.service';
 
@@ -15,7 +11,6 @@ export class ItemsController {
         return await this.itemService.getItems();
     }
 
-    //post
 
     //add item
     @Post('add-item')

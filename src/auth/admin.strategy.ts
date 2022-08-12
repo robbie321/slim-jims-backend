@@ -17,6 +17,8 @@ export class AdminStrategy extends PassportStrategy(Strategy, 'admin') {
 
   async validate(payload: JwtPayload): Promise<any> {
     const user = await this.authService.checkUserRole(payload);
+    console.log(user);
+
     if (!user) {
       throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
     }

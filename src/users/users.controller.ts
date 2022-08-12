@@ -6,12 +6,7 @@ import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
-    constructor(private authService: AuthService, private userService: UsersService){}
-
-    @Post('register')
-    async registerUser(@Body() reg: RegistrationReqModel) {
-      return await this.authService.registerUser(reg);
-    }
+    constructor(private userService: UsersService){}
 
     @UseGuards(JwtAuthGuard)
     @Put('updateProfileDetails')

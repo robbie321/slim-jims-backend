@@ -16,12 +16,6 @@ export class Item {
   @Column({default: 0})
   stockQuantity: number;
 
-  // @OneToMany(() => Image, (image) => image.items, {
-  //   onDelete: 'CASCADE',
-  // })
-  // @JoinColumn()
-  // image: Image[];
-
   @ManyToMany(() => Order, (order) => order.items)
   orders: Order[]
 }

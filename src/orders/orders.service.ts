@@ -32,7 +32,8 @@ export class OrdersService {
 
         //get info from body
         const {
-            items
+            items,
+            totalCost
         } = request.body
 
         //get user id from bearer token
@@ -43,6 +44,7 @@ export class OrdersService {
         const order = new Order();
         order.user = userId;
         order.items = items
+        order.totalPrice = totalCost;
 
         //minus stock value from item
         this.minusStockQuanity(order.items);

@@ -14,13 +14,14 @@ import { UserSigninReqModel } from './models/user-signin.req.model';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService, private authService: AuthService) {}
 
-  //login
-  @Post('auth/login')
-  async loginUser(@Body() reg: UserSigninReqModel) {
-    return await this.authService.validateUserCredentials(reg);
-  }
+  constructor(private readonly appService: AppService) {}
+
+  // //login
+  // @Post('auth/login')
+  // async loginUser(@Body() reg: UserSigninReqModel) {
+  //   return await this.authService.validateUserCredentials(reg);
+  // }
 
   //show profile
   @UseGuards(JwtAuthGuard)
@@ -28,5 +29,11 @@ export class AppController {
   getProfile(@Request() req) {
     return req.user;
   }
+
+  @Get('hello')
+  async getHello(): Promise<string>{
+    return this.appService.getHello();
+  }
+
 
 }

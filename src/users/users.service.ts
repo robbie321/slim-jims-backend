@@ -28,7 +28,7 @@ export class UsersService {
 
         // update the user by id with the new values from the body
           const user = await this.users.createQueryBuilder('users')
-          .update<User>(User)
+          .update(User)
           .set({ name: named, phoneNumber: mobile, firstAddress: addressLineOne, secondAddress: addressLineTwo, county: county, eircode: eircode})
           .where('users.userId = :userId',{userId})
           .execute();

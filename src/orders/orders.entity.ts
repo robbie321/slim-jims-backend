@@ -8,6 +8,9 @@ export class Order {
   @PrimaryGeneratedColumn('increment', { name: 'orderid' })
   orderId: number;
 
+  @Column({default: 0})
+  totalPrice: number;
+
   @ManyToOne(() => User, (user) => user.orders)
   user: User
 

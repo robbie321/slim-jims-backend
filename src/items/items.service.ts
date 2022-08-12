@@ -10,7 +10,7 @@ export class ItemsService {
 
     //return all items
     public async getItems(): Promise<Item[]> {
-       return await this.items.find();
+       return await this.items.find().then().catch().finally();
     }
 
     //add item to marketplace
